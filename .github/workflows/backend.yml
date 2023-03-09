@@ -37,16 +37,8 @@ jobs:
       - name: Gradle 명령 실행을 위한 권한을 부여합니다
         run: chmod +x gradlew
 
-      - name: 프로젝트를 빌드하고 테스트를 진행합니다
-        run: | 
-          ./gradlew clean build test
-          if [ $? -ne 0 ]; then
-            echo "💥 Test failed"
-            grep -rn --include \*.java "at .*\(" build/test-results/test/ | sed "s|.*${{ env.PROJECT_ROOT }}/||" | sed 's|\(.*\)/\(.*\)/\(.*\)/\(.*\).java:\([0-9]*\):.*at \(.*\)(.*)|\2.\3.\4 -> \5 [\6]|'
-          else
-            echo "✅ All tests passed successfully"
-          fi
-        shell: bash
+      - name: Gradle을 이용해서 프로젝트 빌드를 수행합니다
+        run: ./gradlew clean build
 
       - name: 테스트 결과를 PR 코멘트로 등록합니다
         uses: EnricoMi/publish-unit-test-result-action@v2

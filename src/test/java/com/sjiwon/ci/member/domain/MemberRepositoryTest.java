@@ -8,9 +8,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 
 import java.util.List;
+import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
 @DataJpaTest
@@ -56,9 +56,12 @@ class MemberRepositoryTest {
     }
     
     @Test
-    @DisplayName("없는 멤버를 조회하면 예외가 발생한다")
+    @DisplayName("없는 멤버를 조회하면 빈 값이 반환된다")
     void nonExistMember() {
-        assertThatThrownBy(() -> memberRepository.findByName("Anonymous"))
-                .isInstanceOf(RuntimeException.class);
+        // when
+        Optional<Member> member = memberRepository.findByName("Anonymous");
+
+        // then
+        assertThat(member).isEmpty();
     }
 }

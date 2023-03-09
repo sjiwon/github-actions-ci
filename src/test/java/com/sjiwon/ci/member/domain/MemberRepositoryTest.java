@@ -45,12 +45,12 @@ class MemberRepositoryTest {
     }
 
     @Test
-    @DisplayName("특정 멤버를 조회한다 (고의 실패 테스트)")
+    @DisplayName("특정 멤버를 조회한다")
     void findSpecificMember() {
         // when
         Member member = memberRepository.findByName("memberA").orElseThrow(RuntimeException::new);
 
         // then
-        assertThat(member.getName()).isEqualTo("memberA");
+        assertThat(member.getName()).isEqualTo("memberC");
     }
 }

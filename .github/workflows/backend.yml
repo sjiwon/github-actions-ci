@@ -1,4 +1,4 @@
-name: Github Actions Workflow [Push & Pull Request]
+name: Backend CI
 
 on:
   push:
@@ -12,9 +12,6 @@ on:
     types:
       - opened
       - synchronize
-
-env:
-  PROJECT_ROOT: 'com.sjiwon.ci'
 
 jobs:
   build:
@@ -34,28 +31,37 @@ jobs:
         with:
           timezone: Asia/Seoul
 
+      - name: Cache Gradle packages
+        uses: actions/cache@v2
+        with:
+          path: |
+            ~/.gradle/caches
+            ~/.gradle/wrapper
+          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
+          restore-keys: |
+            ${{ runner.os }}-gradle-
+
       - name: Gradle 명령 실행을 위한 권한을 부여합니다
         run: chmod +x gradlew
 
-      - name: 프로젝트 빌드와 테스트를 수행합니다
-        run: |
-          if [ $? -eq 0 ]; then
-            echo "✅ All tests passed successfully"
-          else
-            echo "💥 Test failed"
-            grep -rn --include \*.java "at .*\(" build/test-results/test/ | sed "s|.*${{ env.PROJECT_ROOT }}/||" | sed 's|\(.*\)/\(.*\)/\(.*\)/\(.*\).java:\([0-9]*\):.*at \(.*\)(.*)|\2.\3.\4 -> \5 [\6]|'
-          fi
-        shell: bash
+      - name: Gradle을 이용해서 프로젝트 빌드를 수행합니다
+        run: ./gradlew clean build
 
       - name: 테스트 결과를 PR 코멘트로 등록합니다
         uses: EnricoMi/publish-unit-test-result-action@v2
-        if: ${{ github.event_name == 'pull_request' }}
+        if: always()
         with:
           files: '**/build/test-results/test/TEST-*.xml'
 
       - name: 테스트 실패 시, 실패한 코드 라인에 Check 코멘트를 등록합니다
         uses: mikepenz/action-junit-report@v3
-        if: ${{ github.event_name == 'pull_request' }}
+        if: always()
         with:
           report_paths: '**/build/test-results/test/TEST-*.xml'
-          token: ${{ secrets.GITHUB_TOKEN }}
+          token: ${{ github.token }}
+
+      - name: Cleanup Gradle Cache
+        if: always()
+        run: |
+          rm -f ~/.gradle/caches/modules-2/modules-2.lock
+          rm -f ~/.gradle/caches/modules-2/gc.properties

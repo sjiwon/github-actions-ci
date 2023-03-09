@@ -10,6 +10,7 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
 @DataJpaTest
@@ -52,5 +53,12 @@ class MemberRepositoryTest {
 
         // then
         assertThat(member.getName()).isEqualTo("memberA");
+    }
+    
+    @Test
+    @DisplayName("없는 멤버를 조회하면 예외가 발생한다")
+    void nonExistMember() {
+        assertThatThrownBy(() -> memberRepository.findByName("Anonymous"))
+                .isInstanceOf(RuntimeException.class);
     }
 }

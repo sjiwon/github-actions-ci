@@ -37,12 +37,9 @@ jobs:
       - name: Gradle 명령 실행을 위한 권한을 부여합니다
         run: chmod +x gradlew
 
-      - name: 프로젝트를 빌드합니다
-        run: ./gradlew clean build
-
-      - name: 테스트를 수행합니다
-        run: |
-          ./gradlew test
+      - name: 프로젝트를 빌드하고 테스트를 진행합니다
+        run: | 
+          ./gradlew clean build test
           if [ $? -eq 0 ]; then
             echo "✅ All tests passed successfully"
           else

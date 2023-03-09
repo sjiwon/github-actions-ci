@@ -37,4 +37,14 @@ class MemberRepositoryTest {
                         .contains("memberA", "memberB", "memberC")
         );
     }
+
+    @Test
+    @DisplayName("특정 멤버를 조회한다 (고의 실패 테스트)")
+    void findSpecificMember() {
+        // when
+        Member member = memberRepository.findById(100L).orElseThrow(RuntimeException::new);
+
+        // then
+        assertThat(member.getName()).isEqualTo("memberA");
+    }
 }

@@ -40,7 +40,7 @@ jobs:
       - name: 프로젝트를 빌드합니다
         run: ./gradlew clean build
 
-      - name: 프로젝트 테스트를 수행합니다
+      - name: 테스트를 수행합니다
         run: |
           ./gradlew test
           if [ $? -eq 0 ]; then

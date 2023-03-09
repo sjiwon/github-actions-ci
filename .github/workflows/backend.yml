@@ -13,9 +13,6 @@ on:
       - opened
       - synchronize
 
-env:
-  PROJECT_ROOT: 'com.sjiwon.ci'
-
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -42,13 +39,13 @@ jobs:
 
       - name: 테스트 결과를 PR 코멘트로 등록합니다
         uses: EnricoMi/publish-unit-test-result-action@v2
-        if: ${{ github.event_name == 'pull_request' }}
+        if: always()
         with:
           files: '**/build/test-results/test/TEST-*.xml'
 
       - name: 테스트 실패 시, 실패한 코드 라인에 Check 코멘트를 등록합니다
         uses: mikepenz/action-junit-report@v3
-        if: ${{ github.event_name == 'pull_request' }}
+        if: always()
         with:
           report_paths: '**/build/test-results/test/TEST-*.xml'
           token: ${{ github.token }}

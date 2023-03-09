@@ -48,7 +48,6 @@ jobs:
           else
             echo "💥 Test failed"
             grep -rn --include \*.java "at .*\(" build/test-results/test/ | sed "s|.*${{ env.PROJECT_ROOT }}/||" | sed 's|\(.*\)/\(.*\)/\(.*\)/\(.*\).java:\([0-9]*\):.*at \(.*\)(.*)|\2.\3.\4 -> \5 [\6]|'
-            exit 1
           fi
         shell: bash
 

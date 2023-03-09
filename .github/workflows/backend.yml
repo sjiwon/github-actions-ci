@@ -59,3 +59,4 @@ jobs:
         if: ${{ github.event_name == 'pull_request' }}
         with:
           report_paths: '**/build/test-results/test/TEST-*.xml'
+          token: ${{ github.token }}

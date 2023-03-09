@@ -1,5 +1,6 @@
 package com.sjiwon.ci.member.domain;
 
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -23,6 +24,11 @@ class MemberRepositoryTest {
         memberRepository.save(Member.createMember("memberC", 20));
     }
 
+    @AfterEach
+    void after() {
+        memberRepository.deleteAll();
+    }
+
     @Test
     @DisplayName("전체 멤버를 조회한다")
     void findAllMember() {
@@ -42,7 +48,7 @@ class MemberRepositoryTest {
     @DisplayName("특정 멤버를 조회한다 (고의 실패 테스트)")
     void findSpecificMember() {
         // when
-        Member member = memberRepository.findById(1L).orElseThrow(RuntimeException::new);
+        Member member = memberRepository.findByName("memberA").orElseThrow(RuntimeException::new);
 
         // then
         assertThat(member.getName()).isEqualTo("memberA");

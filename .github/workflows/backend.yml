@@ -53,11 +53,9 @@ jobs:
         if: ${{ github.event_name == 'pull_request' }}
         with:
           files: '**/build/test-results/test/TEST-*.xml'
-          token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: 테스트 실패 시, 실패한 코드 라인에 Check 코멘트를 등록합니다
         uses: mikepenz/action-junit-report@v3
         if: ${{ github.event_name == 'pull_request' }}
         with:
           report_paths: '**/build/test-results/test/TEST-*.xml'
-          token: ${{ secrets.GITHUB_TOKEN }}

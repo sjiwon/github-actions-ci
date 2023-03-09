@@ -51,6 +51,6 @@ class MemberRepositoryTest {
         Member member = memberRepository.findByName("memberA").orElseThrow(RuntimeException::new);
 
         // then
-        assertThat(member.getName()).isEqualTo("memberC");
+        assertThat(member.getName()).isEqualTo("memberA");
     }
 }
